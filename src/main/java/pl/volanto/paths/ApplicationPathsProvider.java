@@ -18,7 +18,11 @@ public class ApplicationPathsProvider {
         return propertiesProvider.getTempPath().relativize(fileInTemp);
     }
 
-    public Path relativizeToPictures(Path fileInPictures) {
-        return propertiesProvider.getProfilePicturesPath().relativize(fileInPictures);
+    public Path resolveWithTempPath(Path fileInTemp) {
+        return propertiesProvider.getTempPath().resolve(fileInTemp);
+    }
+
+    public Path resolveWithPicturePath(String fileInPicture) {
+        return propertiesProvider.getProfilePicturesPath().resolve(fileInPicture);
     }
 }

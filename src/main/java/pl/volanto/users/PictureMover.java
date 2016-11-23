@@ -2,6 +2,7 @@ package pl.volanto.users;
 
 import org.springframework.stereotype.Component;
 import pl.volanto.files.FilesWrapper;
+import pl.volanto.paths.ApplicationPathsProvider;
 import pl.volanto.properties.PropertiesProvider;
 
 import java.nio.file.Path;
@@ -11,20 +12,19 @@ import java.util.UUID;
 public class PictureMover {
 
     private final FilesWrapper filesWrapper;
-    private final PropertiesProvider propertiesProvider;
+    private final ApplicationPathsProvider applicationPathsProvider;
 
-    public PictureMover(FilesWrapper filesWrapper, PropertiesProvider propertiesProvider) {
+    public PictureMover(FilesWrapper filesWrapper, ApplicationPathsProvider applicationPathsProvider) {
         this.filesWrapper = filesWrapper;
-        this.propertiesProvider = propertiesProvider;
+        this.applicationPathsProvider = applicationPathsProvider;
     }
 
     public Path movePicture(Path picturePath) {
 
-        Path tempPath = propertiesProvider.getTempPath();
-        Path picturesPath = propertiesProvider.getProfilePicturesPath();
-        Path newPicturePath = picturesPath.resolve(UUID.randomUUID().toString());
+        String randomFileName = UUID.randomUUID().toString();
+        Path newPicturePath = applicationPathsProvider.resolveWithPicturePath(randomFileName);
 
-        Path tempPicure = tempPath.resolve(picturePath);
+        Path tempPicure = applicationPathsProvider.resolveWithTempPath(picturePath);
         return filesWrapper.move(tempPicure, newPicturePath);
     }
 
